@@ -99,6 +99,75 @@ def chat(
     )
     is_how_are_you = any(expr in q_low for expr in SMALLTALK_HOW_ARE_YOU)
 
+    if is_greeting and not is_how_are_you:
+        answer = "Bonjour ! Comment puis-je t’aider aujourd’hui ? 🙂"
+        final_intent = "smalltalk_greeting"
+        final_confidence = 1.0
+        sources = []
+
+        latency_ms = int((time.time() - start) * 1000)
+        event = ChatEvent(
+            user_hash=user_hash,
+            channel=payload.channel,
+            user_message=msg,
+            detected_language=payload.language,
+            intent=final_intent,
+            entities={},
+            response=answer,
+            confidence=final_confidence,
+            resolved=True,
+            latency_ms=latency_ms,
+            sentiment=None,
+            urgency_score=0.0,
+        )
+        db.add(event)
+        db.commit()
+        db.refresh(event)
+
+        return ChatResponse(
+            answer=answer,
+            intent=final_intent,
+            entities={},
+            confidence=final_confidence,
+            sources=sources,
+            sentiment=None,
+            urgency_score=0.0,
+        )
+
+    if is_how_are_you:
+        answer = "Ça va très bien, merci ! Et toi, comment puis-je t’aider ?"
+        final_intent = "smalltalk_how_are_you"
+        final_confidence = 1.0
+        sources = []
+
+        latency_ms = int((time.time() - start) * 1000)
+        event = ChatEvent(
+            user_hash=user_hash,
+            channel=payload.channel,
+            user_message=msg,
+            detected_language=payload.language,
+            intent=final_intent,
+            entities={},
+            response=answer,
+            confidence=final_confidence,
+            resolved=True,
+            latency_ms=latency_ms,
+            sentiment=None,
+            urgency_score=0.0,
+        )
+        db.add(event)
+        db.commit()
+        db.refresh(event)
+
+        return ChatResponse(
+            answer=answer,
+            intent=final_intent,
+            entities={},
+            confidence=final_confidence,
+            sources=sources,
+            sentiment=None,
+            urgency_score=0.0,
+        )
     # 1bis) Sentiment + urgence (pour tous les messages)
     sentiment_label = None
     urgency_score = 0.0
