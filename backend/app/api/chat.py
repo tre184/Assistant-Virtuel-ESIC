@@ -385,7 +385,6 @@ def chat(
             sentiment=sentiment_label,
             urgency_score=urgency_score,
         )
-
     # ------------------------
     # 3) ROUTAGE PAR INTENT
     # ------------------------
